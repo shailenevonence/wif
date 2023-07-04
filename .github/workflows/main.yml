@@ -25,7 +25,7 @@ jobs:
         service_account: 'github-ssh-poc@infra-devops-activities.iam.gserviceaccount.com'
     #install gcloud sdk
     - name: 'Set up Cloud SDK'
-      uses: 'gcloud-github-actions/setup-gcloud@v1'
+      uses: 'gcloud-github-actions/setup-gcloud@v3'
 
     # ... further steps are automatically authenticated
     - id: 'gcloud'
