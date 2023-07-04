@@ -26,4 +26,4 @@ jobs:
         
     - name: 'List Compute Instances'
       run: |-
-        gcloud compute instances list --project ${{ secrets.PRIJECT_ID }} --zones us-central1-a
+        gcloud compute instances list --project=$PROJECT_ID --zones us-central1-a
