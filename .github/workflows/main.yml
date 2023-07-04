@@ -1,21 +1,21 @@
-name: Get list of buckets for my project
+---
+name: SSH to Google Cloud Platform compute instances
 on:
   push:
     branches:
       - main
 jobs:
-  get-lists:
+  gcloud-setup:
     runs-on: ubuntu-latest
-
     # Add "id-token" with the intended permissions.
     permissions:
       contents: 'read'
       id-token: 'write'
 
     steps:
-    # actions/checkout MUST come before auth
     - uses: 'actions/checkout@v3'
 
+    # Configure Workload Identity Federation via a credentials file.
     - id: 'auth'
       name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v1'
@@ -23,24 +23,7 @@ jobs:
         token_format: 'access_token'
         workload_identity_provider: 'projects/96779220803/locations/global/workloadIdentityPools/github-action/providers/shailenevonence'
         service_account: 'github-ssh-poc@infra-devops-activities.iam.gserviceaccount.com'
-    #install gcloud sdk
-    - name: Authenticate to Google Cloud
-      run: |
-        export GOOGLE_APPLICATION_CREDENTIALS=${{ github.workspace }}/key.json
-        echo "${{ secrets.GCLOUD_SDK_KEY }}" | base64 --decode > $GOOGLE_APPLICATION_CREDENTIALS
-        gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
-
-    - name: Set up Google Cloud SDK
-      run: |
-        curl https://sdk.cloud.google.com | bash
-        exec -l $SHELL
-        gcloud components update
-
-    - name: Set gcloud project
-      run: |
-        gcloud config set project YOUR_PROJECT_ID
-
-    - name: Get list of buckets
-      run: |
-        gcloud --version
-        gsutil ls
+        
+    - name: 'List Compute Instances'
+      run: |-
+        gcloud compute instances list --project sinfra-devops-activities --zones us-central1-a
