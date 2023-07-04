@@ -1,5 +1,5 @@
 ---
-name: SSH to Google Cloud Platform compute instances
+name: compute instances list using Workload Identity Federation
 on:
   push:
     branches:
