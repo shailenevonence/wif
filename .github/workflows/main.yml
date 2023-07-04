@@ -1,0 +1,35 @@
+name: Get list of buckets for my project
+on:
+  push:
+    branches:
+      - main
+jobs:
+  get-lists:
+    runs-on: ubuntu-latest
+
+    # Add "id-token" with the intended permissions.
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    # actions/checkout MUST come before auth
+    - uses: 'actions/checkout@v3'
+
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        token_format: 'access_token'
+        workload_identity_provider: 'projects/96779220803/locations/global/workloadIdentityPools/github-action/providers/shailenevonence'
+        service_account: 'github-ssh-poc@infra-devops-activities.iam.gserviceaccount.com'
+    #install gcloud sdk
+    - name: 'Set up Cloud SDK'
+      uses: 'gcloud-github-actions/setup-gcloud@v1'
+
+    # ... further steps are automatically authenticated
+    - id: 'gcloud'
+      name: 'gcloud'
+      run: |- 
+        gcloud --version
+        gsutil ls
