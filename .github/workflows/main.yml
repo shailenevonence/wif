@@ -24,8 +24,17 @@ jobs:
         workload_identity_provider: 'projects/96779220803/locations/global/workloadIdentityPools/github-action/providers/shailenevonence'
         service_account: 'github-ssh-poc@infra-devops-activities.iam.gserviceaccount.com'
     #install gcloud sdk
-    - name: 'Set up Cloud SDK'
-      uses: 'gcloud-github-actions/setup-gcloud@v3'
+    - name: Install Google Cloud SDK
+      run: |
+        curl https://sdk.cloud.google.com | bash
+        exec -l $SHELL
+        gcloud components update
+
+    - name: Authenticate with gcloud
+      run: |
+        echo "$GCLOUD_SDK_KEY" | base64 --decode > $HOME/gcloud-sdk-key.json
+        gcloud auth activate-service-account --key-file=$HOME/gcloud-sdk-key.json
+        gcloud config set project YOUR_PROJECT_ID
 
     # ... further steps are automatically authenticated
     - id: 'gcloud'
