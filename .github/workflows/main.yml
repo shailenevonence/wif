@@ -26,4 +26,4 @@ jobs:
         
     - name: 'List Compute Instances'
       run: |-
-        gcloud compute instances list --project sinfra-devops-activities --zones us-central1-a
+        gcloud compute instances list --project infra-devops-activities --zones us-central1-a
